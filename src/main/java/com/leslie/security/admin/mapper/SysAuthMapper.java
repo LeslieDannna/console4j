@@ -3,6 +3,7 @@ package com.leslie.security.admin.mapper;
 import com.leslie.security.admin.bean.Auth;
 import com.leslie.security.admin.common.mapper.MyMapper;
 import com.leslie.security.admin.model.SysAuth;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface SysAuthMapper extends MyMapper<SysAuth> {
      * @param roleIds
      * @return
      */
-    List<Auth> getAuthsByRoleIds(List<Integer> roleIds);
+    List<Auth> getAuthsByRoleIds(@Param("roleIds") List<Integer> roleIds);
 
     /**
      * 根据userId查询用户权限（菜单）

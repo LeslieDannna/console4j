@@ -29,6 +29,7 @@ public class AppContextHelper implements ApplicationContextAware {
     }
 
     public static HttpServletRequest getRequest(){
+
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         return sra.getRequest();

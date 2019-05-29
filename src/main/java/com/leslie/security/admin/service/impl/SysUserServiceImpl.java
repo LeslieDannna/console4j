@@ -15,6 +15,7 @@ import com.leslie.security.admin.service.SysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.*;
@@ -103,5 +104,29 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         }
         parent.setChildren(children);
         return children;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysUser user) {
+        Weekend<SysUser> weekend = Weekend.of(SysUser.class);
+        weekend.weekendCriteria().andEqualTo(SysUser::getUserName,user.getUserName());
+        List<SysUser> users = sysUserMapper.selectByExample(weekend);
+        if (!users.isEmpty()){
+            SysUser sysUser = users.get(0);
+            Integer id = sysUser.getId();
+            BeanUtils.copyProperties(user,sysUser);
+            sysUser.setId(id);
+            sysUserMapper.updateByPrimaryKeySelective(sysUser);
+        }
+        int i = 10/0;
+    }
+
+    @Override
+//    @Transactional(rollbackFor = Exception.class)
+    public void testRollback(SysUser user) {
+        update(user);
+//        int i = 10/0;
     }
 }

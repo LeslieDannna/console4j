@@ -16,4 +16,9 @@ public interface SysUserService extends BaseService<SysUser>{
     User getUserByUserName(String userName);
 
     Map<String,Object> getMenuNav(Integer userId);
+
+    void update(SysUser user);
+
+    void testRollback(SysUser user);
+
 }

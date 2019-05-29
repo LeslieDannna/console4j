@@ -1,8 +1,8 @@
 package com.leslie.security.admin.common.service.impl;
 
+import com.leslie.security.admin.common.mapper.MyMapper;
 import com.leslie.security.admin.common.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 public abstract  class BaseServiceImpl<T> implements BaseService<T> {
 
     @Autowired
-    protected Mapper<T> mapper;
+    protected MyMapper<T> mapper;
     
     @Override
     public T selectByPrimaryKey(Object key) {

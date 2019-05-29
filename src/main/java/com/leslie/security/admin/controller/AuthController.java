@@ -5,8 +5,12 @@ import com.leslie.security.admin.auth.AuthUser;
 import com.leslie.security.admin.jwt.JwtTokenUtil;
 import com.leslie.security.admin.model.SysUser;
 import com.leslie.security.admin.service.SysUserService;
+import com.leslie.security.admin.service.TestService;
 import com.leslie.security.admin.utils.MyPage;
 import com.leslie.security.admin.utils.WebUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,9 +24,12 @@ import java.util.Map;
  * @author Leslie.Lam
  * @create 2018-12-09 15:26
  **/
+@CrossOrigin
 @RestController
 @RequestMapping("auth")
 public class AuthController {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SysUserService sysUserService;
@@ -32,6 +39,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TestService testService;
 
     @PostMapping("login")
     public String login(@RequestBody JSONObject object){
@@ -61,4 +71,23 @@ public class AuthController {
         return sysUserService.selectByPrimaryKey(userId);
     }
 
+    @PostMapping("user/edit")
+    public void edit(@RequestBody SysUser user){
+        String password = user.getPassword();
+        if (StringUtils.isNotBlank(password)){
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        sysUserService.update(user);
+    }
+
+    @PostMapping("test")
+    public void test(@RequestBody SysUser user){
+//        testService.testRollback(user);
+//        sysUserService.testRollback(user);
+        try {
+            int i = 1/0;
+        } catch (Exception e) {
+            logger.error("哎哟报错了！",e);
+        }
+    }
 }

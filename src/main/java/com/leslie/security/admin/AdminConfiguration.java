@@ -1,10 +1,11 @@
 package com.leslie.security.admin;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
-import tk.mybatis.spring.annotation.MapperScan;
 
+//@EnableScheduling
 @Configuration
-@MapperScan("com.leslie.security.admin.mapper")
+@MapperScan(value = "com.leslie.security.admin.mapper")
 public class AdminConfiguration {
 
 

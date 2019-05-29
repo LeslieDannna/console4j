@@ -28,6 +28,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Override
+    protected void configure(HttpSecurity security) throws Exception {
+        security
+                .csrf().disable()  //CRSF禁用，因为不使用session
+                .sessionManagement().disable()  //禁用session
+                .formLogin().disable() //禁用form登录
+                .cors()  //支持跨域
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new UserAuthenticationEntryPoint())   //异常处理
+                .and()
+                .authorizeRequests()
+                .antMatchers("/auth/login","/auth/nav","/auth/test","/test/**").permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .headers().frameOptions().disable()
+                .and()
+                .httpBasic()
+                .and()
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,28 +69,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationTokenFilter authenticationTokenFilterBean() {
         return new AuthenticationTokenFilter();
-    }
-
-    @Override
-    protected void configure(HttpSecurity security) throws Exception {
-        security
-                .csrf().disable()  //CRSF禁用，因为不使用session
-                .sessionManagement().disable()  //禁用session
-                .formLogin().disable() //禁用form登录
-                .cors()  //支持跨域
-                .and()
-                .exceptionHandling().authenticationEntryPoint(new UserAuthenticationEntryPoint())   //异常处理
-                .and()
-                .authorizeRequests()
-                .antMatchers("/auth/login","/auth/nav","/auth/test").permitAll()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .headers().frameOptions().disable()
-                .and()
-                .httpBasic()
-                .and()
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

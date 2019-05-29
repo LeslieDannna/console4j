@@ -37,6 +37,10 @@ public class MyPage {
         return startPage(excutor,pageNum,pageSize);
     }
 
+    public static StartPage startOf(Integer currentPage, Integer pageSize){
+        return new StartPage(currentPage,pageSize);
+    }
+
     public interface Excutor<T> {
         List<T> excute();
     }
@@ -69,18 +73,10 @@ public class MyPage {
 
         private Integer pageSize;
 
-        private Long timestamp;
-
-        public StartPage() {
+        private StartPage() {
         }
 
-        public StartPage(Integer pageNum, Integer pageSize, Long timestamp) {
-            this.pageNum = pageNum;
-            this.pageSize = pageSize;
-            this.timestamp = timestamp;
-        }
-
-        public StartPage(Integer currentPage, Integer pageSize) {
+        private StartPage(Integer currentPage, Integer pageSize) {
             this.pageNum = currentPage;
             this.pageSize = pageSize;
         }
@@ -101,13 +97,6 @@ public class MyPage {
             this.pageSize = pageSize;
         }
 
-        public Long getTimestamp() {
-            return timestamp;
-        }
-
-        public void setTimestamp(Long timestamp) {
-            this.timestamp = timestamp;
-        }
     }
 
 }
